@@ -1,14 +1,6 @@
-"""
-
-"""
-
-# Created by Wenjie Du <wenjay.du@gmail.com>
-# License: BSD-3-Clause
-
 import argparse
 import os
 import time
-
 import numpy as np
 import torch
 from pypots.data.saving import pickle_dump
@@ -178,6 +170,11 @@ if __name__ == "__main__":
         logger.info(
             f"Round{n_round} - {args.model} on {args.dataset}: MAE={mae:.4f}, MSE={mse:.4f}, MRE={mre:.4f}"
         )
+
+    # Save the model's state_dict after all rounds are completed
+    final_model_path = os.path.join(result_saving_path, "final_model_state.pth")
+    torch.save(model.state_dict(), final_model_path)
+    logger.info(f"Model state saved to {final_model_path}")
 
     mean_mae, mean_mse, mean_mre = (
         np.mean(mae_collector),
